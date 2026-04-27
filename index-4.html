@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEJM BTS — Fiches de révision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1A2E5A;
+    --navy2: #243870;
+    --gold: #C8860A;
+    --gold-light: #FEF3C7;
+    --t1: #2563EB; --t1l: #DBEAFE; --t1d: #1D4ED8;
+    --t2: #0D9488; --t2l: #CCFBF1; --t2d: #0F766E;
+    --t3: #7C3AED; --t3l: #EDE9FE; --t3d: #6D28D9;
+    --t4: #EA580C; --t4l: #FED7AA; --t4d: #C2410C;
+    --t5: #059669; --t5l: #D1FAE5; --t5d: #047857;
+    --t6: #DC2626; --t6l: #FEE2E2; --t6d: #B91C1C;
+    --bg: #F8F9FC;
+    --surface: #FFFFFF;
+    --border: #E2E8F0;
+    --text: #1E293B;
+    --muted: #64748B;
+    --radius: 10px;
+    --sidebar: 260px;
+    --header: 64px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--text); background: var(--bg); line-height: 1.65; }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: var(--header);
+    background: var(--navy); z-index: 100;
+    display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem;
+    border-bottom: 2px solid var(--gold);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 14px; }
+  .logo-text { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #fff; letter-spacing: -.3px; }
+  .logo-badge { background: var(--gold); color: #fff; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; letter-spacing: .5px; }
+  .topbar-search {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 8px; padding: 7px 14px; width: 300px;
+  }
+  .topbar-search input {
+    background: none; border: none; outline: none; color: #fff; font-size: 14px;
+    font-family: 'DM Sans', sans-serif; width: 100%; placeholder-color: rgba(255,255,255,.5);
+  }
+  .topbar-search input::placeholder { color: rgba(255,255,255,.5); }
+  .search-icon { color: rgba(255,255,255,.5); font-size: 16px; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .progress-pill { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,.1); border-radius: 20px; padding: 5px 12px; color: #fff; font-size: 12px; }
+  .progress-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed; top: var(--header); left: 0; bottom: 0;
+    width: var(--sidebar); background: var(--surface);
+    border-right: 1px solid var(--border); overflow-y: auto;
+    z-index: 50; padding: 1.25rem 0;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .sidebar-section { margin-bottom: .25rem; }
+  .sidebar-theme-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 18px; cursor: pointer; width: 100%;
+    font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .6px;
+    background: none; border: none; text-align: left; transition: background .15s;
+    color: var(--muted);
+  }
+  .sidebar-theme-btn:hover { background: var(--bg); }
+  .sidebar-theme-btn.active { color: var(--text); }
+  .theme-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .sidebar-chapters { display: none; }
+  .sidebar-chapters.open { display: block; }
+  .sidebar-ch-link {
+    display: block; padding: 7px 18px 7px 38px;
+    font-size: 13px; color: var(--muted); text-decoration: none;
+    transition: all .15s; border-left: 2px solid transparent; cursor: pointer;
+  }
+  .sidebar-ch-link:hover { color: var(--text); background: var(--bg); }
+  .sidebar-ch-link.active { color: var(--text); font-weight: 500; border-left-color: var(--navy); background: #F0F4FF; }
+  .sidebar-divider { height: 1px; background: var(--border); margin: .5rem 1rem; }
+
+  /* ── MAIN ── */
+  .main { margin-left: var(--sidebar); padding-top: var(--header); min-height: 100vh; }
+  .content { max-width: 860px; padding: 2.5rem 2.5rem 5rem; }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #243880 60%, #2D4599 100%);
+    border-radius: 14px; padding: 3rem 2.5rem; margin-bottom: 2.5rem;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; right: -60px; top: -60px;
+    width: 280px; height: 280px; border-radius: 50%;
+    background: rgba(200,134,10,.15);
+  }
+  .hero-label { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: .75rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: #fff; line-height: 1.2; margin-bottom: .75rem; }
+  .hero p { color: rgba(255,255,255,.75); font-size: 15px; max-width: 520px; margin-bottom: 1.5rem; }
+  .hero-stats { display: flex; gap: 2rem; }
+  .hero-stat { text-align: center; }
+  .hero-stat-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--gold); font-weight: 700; }
+  .hero-stat-label { font-size: 11px; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: .5px; margin-top: 2px; }
+
+  /* ── THEME SECTION ── */
+  .theme-section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+  .theme-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 1.25rem 1.5rem; border-radius: 12px; margin-bottom: 1.25rem;
+    position: sticky; top: var(--header); z-index: 10;
+  }
+  .theme-icon { font-size: 1.4rem; }
+  .theme-header h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; color: #fff; }
+  .theme-header .theme-sub { font-size: 12px; color: rgba(255,255,255,.75); margin-top: 2px; }
+  .theme-chips { margin-left: auto; display: flex; gap: 6px; }
+  .chip { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; background: rgba(255,255,255,.2); color: #fff; }
+
+  /* ── FICHE CARD ── */
+  .fiche-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; margin-bottom: 1rem; overflow: hidden;
+    transition: box-shadow .2s;
+  }
+  .fiche-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+  .fiche-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 1rem 1.25rem; cursor: pointer; user-select: none;
+    transition: background .15s;
+  }
+  .fiche-header:hover { background: var(--bg); }
+  .fiche-num {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0; color: #fff;
+  }
+  .fiche-title-wrap { flex: 1; }
+  .fiche-ch-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+  .fiche-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .fiche-discipline { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .fiche-arrow { color: var(--muted); font-size: 18px; transition: transform .25s; flex-shrink: 0; }
+  .fiche-card.open .fiche-arrow { transform: rotate(180deg); }
+
+  .fiche-body { display: none; border-top: 1px solid var(--border); }
+  .fiche-card.open .fiche-body { display: block; }
+  .fiche-body-inner { padding: 1.5rem; }
+
+  /* ── CONTENT BLOCKS ── */
+  .section-block { margin-bottom: 1.5rem; }
+  .section-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px;
+    padding: 6px 12px; border-radius: 6px; margin-bottom: .75rem; display: inline-block;
+  }
+  .def-box {
+    border-left: 3px solid; padding: .9rem 1rem;
+    border-radius: 0 8px 8px 0; margin-bottom: 1rem; font-size: 14px;
+    background: var(--bg);
+  }
+  .def-box strong { display: block; font-size: 13px; margin-bottom: 4px; }
+
+  .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+  table.fiche-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.fiche-table th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: #fff; }
+  table.fiche-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  table.fiche-table tr:last-child td { border-bottom: none; }
+  table.fiche-table tr:nth-child(even) td { background: var(--bg); }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .mini-card { background: var(--bg); border-radius: 8px; padding: .9rem 1rem; font-size: 13.5px; border: 1px solid var(--border); }
+  .mini-card h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: .5rem; }
+  ul.bul { list-style: none; padding: 0; }
+  ul.bul li { padding: 3px 0 3px 16px; position: relative; font-size: 13.5px; color: var(--text); }
+  ul.bul li::before { content: '•'; position: absolute; left: 0; color: var(--muted); }
+  ul.bul li strong { font-weight: 600; }
+
+  .retenir {
+    border-radius: 8px; padding: 1rem 1.1rem; margin-top: 1.25rem;
+    border: 1px solid #BBF7D0; background: #F0FDF4;
+  }
+  .retenir-title { font-size: 12px; font-weight: 700; color: #059669; text-transform: uppercase; letter-spacing: .5px; margin-bottom: .6rem; }
+  .retenir ul { list-style: none; padding: 0; }
+  .retenir ul li { font-size: 13.5px; padding: 3px 0 3px 20px; position: relative; }
+  .retenir ul li::before { content: '✓'; position: absolute; left: 0; color: #059669; font-weight: 700; }
+
+  /* ── SWOT ── */
+  .swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; border-radius: 8px; overflow: hidden; margin-bottom: 1rem; }
+  .swot-cell { padding: .85rem 1rem; }
+  .swot-cell h4 { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: .4rem; text-transform: uppercase; letter-spacing: .5px; }
+  .swot-cell ul { list-style: disc; padding-left: 16px; }
+  .swot-cell ul li { font-size: 12.5px; padding: 2px 0; }
+
+  /* ── SEARCH HIGHLIGHT ── */
+  mark { background: #FEF08A; color: var(--text); border-radius: 2px; padding: 0 2px; }
+
+  /* ── BACK TO TOP ── */
+  .back-top {
+    position: fixed; bottom: 2rem; right: 2rem;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--navy); color: #fff; border: none; cursor: pointer;
+    font-size: 18px; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,.2); transition: transform .2s;
+    z-index: 200; opacity: 0; pointer-events: none; transition: all .2s;
+  }
+  .back-top.visible { opacity: 1; pointer-events: auto; }
+  .back-top:hover { transform: translateY(-3px); }
+
+  /* ── NO RESULT ── */
+  .no-result { text-align: center; padding: 4rem 2rem; color: var(--muted); }
+  .no-result .nr-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .content { padding: 1.5rem; }
+    .grid2 { grid-template-columns: 1fr; }
+    .hero-stats { flex-wrap: wrap; gap: 1rem; }
+    .topbar-search { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <span class="logo-text">CEJM</span>
+    <span class="logo-badge">BTS</span>
+  </div>
+  <div class="topbar-search">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Rechercher une notion, un thème…" autocomplete="off">
+  </div>
+  <div class="topbar-right">
+    <div class="progress-pill"><div class="progress-dot"></div><span id="resultCount">29 fiches</span></div>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div id="sidebarNav"></div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="content" id="mainContent">
+
+    <!-- HERO -->
+    <div class="hero" id="accueil">
+      <div class="hero-label">📚 Fiches de révision</div>
+      <h1>Culture Économique,<br>Juridique & Managériale</h1>
+      <p>Toutes les notions du programme BTS — d'après les manuels Nathan 1re et 2e année. Naviguez par thème ou utilisez la recherche.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-num">6</div><div class="hero-stat-label">Thèmes</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">29</div><div class="hero-stat-label">Chapitres</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">3</div><div class="hero-stat-label">Disciplines</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">180+</div><div class="hero-stat-label">Notions clés</div></div>
+      </div>
+    </div>
+
+    <!-- CONTENT injected by JS -->
+    <div id="ficheContainer"></div>
+    <div id="noResult" class="no-result" style="display:none">
+      <div class="nr-icon">🔍</div>
+      <strong>Aucun résultat</strong><br>Essayez d'autres mots-clés.
+    </div>
+  </div>
+</main>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+const THEMES = [
+  {
+    id: 't1', num: 1, color: '#2563EB', light: '#DBEAFE', icon: '🏢',
+    title: "L'intégration de l'entreprise dans son environnement",
+    disciplines: 'Économie · Droit · Management', year: '1re année',
+    chapters: [
+      {
+        id: 'ch1', num: 1, title: "Les agents économiques en relation avec l'entreprise",
+        discipline: 'Économie',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#DBEAFE;color:#1D4ED8">📊 Définition</span>
+            <div class="def-box" style="border-color:#2563EB">
+              <strong>Agent économique</strong>
+              Acteur qui prend des décisions économiques (production, consommation, épargne). Les principaux agents : <strong>ménages, entreprises, administrations publiques (APU), institutions financières, reste du monde (RDM)</strong>.
+            </div>
+          </div>
+          <div class="section-block">
+            <span class="section-title" style="background:#DBEAFE;color:#1D4ED8">Tableau des agents</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#2563EB"><th>Agent</th><th>Rôle</th><th>Ressource principale</th><th>Emploi principal</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Ménages</strong></td><td>Consommer, épargner</td><td>Salaires, revenus du capital</td><td>Consommation finale, épargne</td></tr>
+                <tr><td><strong>Entreprises</strong></td><td>Produire des biens & services</td><td>Valeur ajoutée, profit</td><td>Investissement (FBCF), salaires</td></tr>
+                <tr><td><strong>APU</strong></td><td>Redistribuer, réguler</td><td>Impôts, cotisations</td><td>Dépenses publiques, transferts</td></tr>
+                <tr><td><strong>Inst. financières</strong></td><td>Financer l'économie</td><td>Dépôts, épargne</td><td>Crédits, placements</td></tr>
+                <tr><td><strong>Reste du monde</strong></td><td>Échanges internationaux</td><td>Exportations reçues</td><td>Importations, IDE</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="section-block">
+            <span class="section-title" style="background:#DBEAFE;color:#1D4ED8">💡 Flux économiques</span>
+            <div class="grid2">
+              <div class="mini-card"><h4 style="color:#2563EB">Flux réels</h4><ul class="bul"><li>Échanges de biens, services, travail</li><li>Produits vendus, heures travaillées</li></ul></div>
+              <div class="mini-card"><h4 style="color:#2563EB">Flux monétaires</h4><ul class="bul"><li>Contrepartie des flux réels</li><li>Salaires, loyers, intérêts, dividendes</li></ul></div>
+            </div>
+            <div class="def-box" style="border-color:#2563EB"><strong>Valeur ajoutée (VA)</strong>VA = Production − Consommations intermédiaires. Le <strong>PIB</strong> = somme des VA de tous les agents résidents.</div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>PIB = somme des VA — indicateur clé de la richesse nationale.</li>
+            <li>L'entreprise est au centre du circuit : elle produit, emploie, distribue des revenus.</li>
+            <li>Distinguer agents <strong>résidents</strong> et <strong>non-résidents</strong> (reste du monde).</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch2', num: 2, title: "Le fonctionnement des marchés",
+        discipline: 'Économie',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#DBEAFE;color:#1D4ED8">Structures de marché</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#2563EB"><th>Structure</th><th>Offreurs</th><th>Demandeurs</th><th>Exemple</th><th>Pouvoir de prix</th></tr></thead>
+              <tbody>
+                <tr><td><strong>CPP</strong></td><td>Nombreux</td><td>Nombreux</td><td>Marché agricole de gros</td><td>Aucun (price-taker)</td></tr>
+                <tr><td><strong>Monopole</strong></td><td>Un seul</td><td>Nombreux</td><td>SNCF (certaines lignes)</td><td>Total (price-maker)</td></tr>
+                <tr><td><strong>Oligopole</strong></td><td>Quelques-uns</td><td>Nombreux</td><td>Téléphonie mobile</td><td>Élevé, interdépendance</td></tr>
+                <tr><td><strong>Monopsone</strong></td><td>Nombreux</td><td>Un seul</td><td>État achetant armement</td><td>Acheteur dominant</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="grid2">
+            <div class="mini-card"><h4 style="color:#2563EB">Loi de la demande</h4><ul class="bul"><li>Relation <strong>inverse</strong> prix/quantité demandée</li><li>Élasticité-prix = %ΔQd / %ΔP</li><li>|Ed| > 1 : élastique (luxe)</li><li>|Ed| < 1 : inélastique (nécessité)</li></ul></div>
+            <div class="mini-card"><h4 style="color:#2563EB">Loi de l'offre</h4><ul class="bul"><li>Relation <strong>positive</strong> prix/quantité offerte</li><li>Déterminants : coûts, technologie, nb producteurs</li><li>Prix d'équilibre = intersection offre/demande</li></ul></div>
+          </div>
+          <div class="section-block">
+            <span class="section-title" style="background:#DBEAFE;color:#1D4ED8">5 conditions de la CPP (Walras)</span>
+            <ul class="bul">
+              <li><strong>Atomicité :</strong> nombreux offreurs et demandeurs</li>
+              <li><strong>Homogénéité :</strong> produits identiques</li>
+              <li><strong>Libre entrée/sortie :</strong> aucune barrière</li>
+              <li><strong>Transparence :</strong> information identique pour tous</li>
+              <li><strong>Mobilité des facteurs :</strong> capital et travail se déplacent librement</li>
+            </ul>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>Prix d'équilibre = rencontre offre/demande — toute variation crée un nouveau déséquilibre.</li>
+            <li>Élasticité-prix clé pour la stratégie tarifaire.</li>
+            <li>CPP = idéal théorique — les marchés réels ont des imperfections (monopoles, externalités, asymétries d'info).</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch3', num: 3, title: "Des pourparlers au contrat",
+        discipline: 'Droit',
+        content: `
+          <div class="def-box" style="border-color:#2563EB"><strong>Contrat (art. 1101 C.civ.)</strong>Accord de volontés entre deux ou plusieurs parties destiné à créer, modifier, transmettre ou éteindre des obligations. Principe d'autonomie de la volonté.</div>
+          <div class="section-block">
+            <span class="section-title" style="background:#DBEAFE;color:#1D4ED8">3 Conditions de validité</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#2563EB"><th>Condition</th><th>Définition</th><th>Sanction si absente</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Consentement</strong></td><td>Volonté libre — vices : erreur, dol (tromperie), violence</td><td>Nullité relative</td></tr>
+                <tr><td><strong>Capacité</strong></td><td>Aptitude juridique à contracter (majeur non sous tutelle)</td><td>Nullité relative</td></tr>
+                <tr><td><strong>Contenu licite</strong></td><td>Objet déterminable, cause licite (non contraire à l'ordre public)</td><td>Nullité absolue</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="grid2">
+            <div class="mini-card"><h4 style="color:#2563EB">Formation</h4><ul class="bul"><li><strong>Offre</strong> = proposition ferme et précise</li><li><strong>Pourparlers</strong> = négociation précontractuelle</li><li><strong>Acceptation</strong> pure et simple → contrat formé</li><li><strong>Avant-contrats</strong> : promesse, pacte de préférence</li></ul></div>
+            <div class="mini-card"><h4 style="color:#2563EB">Effets</h4><ul class="bul"><li>Force obligatoire (art. 1103 C.civ.)</li><li>Effet relatif : lie seulement les parties</li><li>Bonne foi dans l'exécution obligatoire</li><li>Inexécution → exception, résolution, dommages-intérêts</li></ul></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>3 conditions : <strong>consentement + capacité + contenu licite</strong>.</li>
+            <li>Dol = tromperie intentionnelle → vice du consentement → nullité relative.</li>
+            <li>Art. 1103 : le contrat est la loi des parties — force obligatoire fondamentale.</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch4', num: 4, title: "De la création à la pérennité de l'entreprise",
+        discipline: 'Droit + Management',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#DBEAFE;color:#1D4ED8">Formes juridiques comparées</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#2563EB"><th>Forme</th><th>Associés</th><th>Capital min.</th><th>Responsabilité</th><th>Particularité</th></tr></thead>
+              <tbody>
+                <tr><td><strong>EI / Micro</strong></td><td>1</td><td>Aucun</td><td>Illimitée (EI)</td><td>Simple, régime micro possible</td></tr>
+                <tr><td><strong>EURL / SARL</strong></td><td>1–100</td><td>1 €</td><td>Limitée aux apports</td><td>IS ou IR (EURL), gérant associé</td></tr>
+                <tr><td><strong>SAS / SASU</strong></td><td>1 / ≥ 2</td><td>1 €</td><td>Limitée aux apports</td><td>Grande liberté statutaire</td></tr>
+                <tr><td><strong>SA</strong></td><td>≥ 2 / ≥ 7</td><td>37 000 €</td><td>Limitée aux apports</td><td>CA ou directoire/CS, CAC obligatoire</td></tr>
+                <tr><td><strong>SNC</strong></td><td>≥ 2</td><td>Aucun</td><td>Illimitée et solidaire</td><td>IR obligatoire</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="grid2">
+            <div class="mini-card"><h4 style="color:#2563EB">Étapes de création</h4><ul class="bul"><li>Choix de la forme juridique + statuts</li><li>Dépôt du capital social</li><li>Publication au BODACC / JAL</li><li>Immatriculation au RCS (Kbis)</li><li>Attribution du numéro SIRET</li></ul></div>
+            <div class="mini-card"><h4 style="color:#2563EB">Pérennité et cessation</h4><ul class="bul"><li>Cession du fonds de commerce ou des titres</li><li>Dissolution → liquidation → radiation</li><li>Sauvegarde → RJ → liquidation judiciaire</li><li>Fusion-absorption, apport partiel d'actif</li></ul></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>SARL et SAS = formes les plus courantes (responsabilité limitée, capital de 1 €).</li>
+            <li>Immatriculation au RCS → personnalité morale → capacité juridique.</li>
+            <li>Procédure collective : sauvegarde (prévention) → RJ → liquidation judiciaire.</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch5', num: 5, title: "Finalités et performance de l'entreprise",
+        discipline: 'Management',
+        content: `
+          <div class="grid2">
+            <div class="mini-card"><h4 style="color:#2563EB">Finalités économiques</h4><ul class="bul"><li>Production de biens/services marchands</li><li>Création de VA et de profit</li><li>Rémunération des apporteurs de capitaux</li><li>Croissance et pérennité</li></ul></div>
+            <div class="mini-card"><h4 style="color:#2563EB">Parties prenantes (stakeholders)</h4><ul class="bul"><li><strong>Internes :</strong> salariés, dirigeants, actionnaires</li><li><strong>Externes directes :</strong> clients, fournisseurs, banques</li><li><strong>Externes indirectes :</strong> État, ONG, médias</li></ul></div>
+          </div>
+          <div class="section-block">
+            <span class="section-title" style="background:#DBEAFE;color:#1D4ED8">Performance multidimensionnelle</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#2563EB"><th>Dimension</th><th>Indicateurs</th><th>Outils</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Économique</strong></td><td>CA, VA, EBE, résultat net, PDM</td><td>Compte de résultat, SIG</td></tr>
+                <tr><td><strong>Financière</strong></td><td>ROE, ROI, taux d'endettement</td><td>Bilan, ratios financiers</td></tr>
+                <tr><td><strong>Sociale</strong></td><td>Absentéisme, turn-over, eNPS</td><td>Bilan social, baromètre RH</td></tr>
+                <tr><td><strong>Environnementale</strong></td><td>Bilan carbone, consommations énergie</td><td>Rapport RSE, ISO 26000</td></tr>
+                <tr><td><strong>Globale (BSC)</strong></td><td>Tableau de bord prospectif 4 axes</td><td>Balanced Scorecard</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>Performance <strong>multidimensionnelle</strong> : ne pas la réduire au profit.</li>
+            <li>BSC (Balanced Scorecard) = 4 axes : financier, client, processus internes, apprentissage.</li>
+            <li>RSE : triple bottom line = <strong>économique + social + environnemental</strong> (3P : Profit, People, Planet).</li>
+          </ul></div>`
+      }
+    ]
+  },
+  {
+    id: 't2', num: 2, color: '#0D9488', light: '#CCFBF1', icon: '⚖️',
+    title: "La régulation de l'activité économique",
+    disciplines: 'Économie · Droit · Management', year: '1re année',
+    chapters: [
+      {
+        id: 'ch6', num: 6, title: "Le rôle de l'État et les finalités de la politique économique",
+        discipline: 'Économie',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#CCFBF1;color:#0F766E">3 Fonctions de l'État (Musgrave)</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#0D9488"><th>Fonction</th><th>Définition</th><th>Exemples</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Allocation des ressources</strong></td><td>Produire les biens collectifs que le marché ne fournit pas</td><td>Éducation nationale, hôpitaux publics</td></tr>
+                <tr><td><strong>Redistribution</strong></td><td>Réduire les inégalités de revenus et de patrimoine</td><td>Impôt progressif (IR), RSA, allocations</td></tr>
+                <tr><td><strong>Stabilisation</strong></td><td>Réguler le cycle économique (chômage, inflation)</td><td>Plans de relance, politique BCE</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="grid2">
+            <div class="mini-card"><h4 style="color:#0D9488">Politique budgétaire</h4><ul class="bul"><li>Levier : dépenses pub. + fiscalité</li><li>Relance : ↑ dépenses ou ↓ impôts</li><li>Rigueur : ↓ dépenses → ↓ déficit</li><li>Multiplicateur keynésien</li><li>Limite : effet d'éviction</li></ul></div>
+            <div class="mini-card"><h4 style="color:#0D9488">Politique monétaire (BCE)</h4><ul class="bul"><li>Levier : taux directeurs, QE</li><li>Expansive : ↓ taux → ↑ crédit</li><li>Restrictive : ↑ taux → ↓ inflation</li><li>Objectif BCE : inflation < 2%</li><li>Limite : trappe à liquidités</li></ul></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>3 fonctions Musgrave : <strong>allocation + redistribution + stabilisation</strong>.</li>
+            <li>BCE pilote la politique monétaire en zone euro — objectif principal : inflation < 2%.</li>
+            <li>Politique budgétaire = outil de l'État seul ; monétaire = communautaire (BCE).</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch7', num: 7, title: "L'influence des politiques économiques sur l'entreprise",
+        discipline: 'Économie',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#CCFBF1;color:#0F766E">Impacts sur l'entreprise</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#0D9488"><th>Politique</th><th>Mécanisme</th><th>Impact</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Relance budgétaire</strong></td><td>↑ demande globale</td><td>↑ CA, ↑ production, ↑ emploi</td></tr>
+                <tr><td><strong>Politique monétaire expansive</strong></td><td>Crédit moins cher</td><td>Facilite le financement</td></tr>
+                <tr><td><strong>Dépréciation de l'euro</strong></td><td>€ moins cher → exports moins chers</td><td>↑ compétitivité-prix à l'export</td></tr>
+                <tr><td><strong>Fiscalité (↓ IS, CIR)</strong></td><td>↑ capacité d'autofinancement</td><td>↑ investissement R&D</td></tr>
+                <tr><td><strong>Politique de l'emploi</strong></td><td>Subventions à l'embauche</td><td>↓ coût du travail</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="def-box" style="border-color:#0D9488"><strong>CIR — Crédit Impôt Recherche</strong>Principal outil fiscal d'incitation à l'innovation en France. Les entreprises récupèrent 30% de leurs dépenses de R&D en crédit d'impôt.</div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>CIR = principal outil fiscal d'incitation à l'innovation en France.</li>
+            <li>Taux directeur BCE ↓ → ↓ taux crédit → ↑ investissement des entreprises.</li>
+            <li>Avantage comparatif (Ricardo) : base du libre-échange — chaque pays se spécialise dans ce qu'il fait le mieux relativement.</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch8', num: 8, title: "La régulation des activités économiques par le droit",
+        discipline: 'Droit',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#CCFBF1;color:#0F766E">Droit de la concurrence</span>
+            <ul class="bul">
+              <li><strong>Ententes illicites (art. L420-1 C.com.) :</strong> accords entre concurrents pour fixer les prix ou partager les marchés. Sanction : jusqu'à 10% du CA mondial.</li>
+              <li><strong>Abus de position dominante (art. L420-2) :</strong> prix prédateurs, refus de vente, conditions discriminatoires.</li>
+              <li><strong>Concentrations :</strong> contrôle par l'Autorité de la concurrence (fr.) et la Commission européenne.</li>
+              <li><strong>Pratiques commerciales trompeuses (B2C) :</strong> publicité mensongère — sanctionnée par la DGCCRF.</li>
+            </ul>
+          </div>
+          <div class="section-block">
+            <span class="section-title" style="background:#CCFBF1;color:#0F766E">Propriété intellectuelle</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#0D9488"><th>Droit</th><th>Objet</th><th>Durée</th><th>Formalités</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Droit d'auteur</strong></td><td>Œuvres originales (textes, musique, logiciels)</td><td>Vie + 70 ans</td><td>Automatique</td></tr>
+                <tr><td><strong>Brevet</strong></td><td>Invention nouvelle, inventive, industrielle</td><td>20 ans</td><td>Dépôt INPI</td></tr>
+                <tr><td><strong>Marque</strong></td><td>Signe distinctif (nom, logo, slogan)</td><td>10 ans renouvelable</td><td>Dépôt INPI</td></tr>
+                <tr><td><strong>Dessin & modèle</strong></td><td>Apparence esthétique d'un produit</td><td>5 ans × 5 (max 25)</td><td>Dépôt INPI</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>Ententes illicites + abus de position dominante = 2 infractions majeures du droit de la concurrence.</li>
+            <li>Marque = protection 10 ans <strong>renouvelable indéfiniment</strong> (avantage sur le brevet).</li>
+            <li>Brevet : 3 conditions — <strong>nouveauté + activité inventive + application industrielle</strong>.</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch9', num: 9, title: "L'environnement de l'entreprise (veille et diagnostic)",
+        discipline: 'Management',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#CCFBF1;color:#0F766E">PESTEL — Macro-environnement</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#0D9488"><th>Facteur</th><th>Éléments analysés</th><th>Impact communication</th></tr></thead>
+              <tbody>
+                <tr><td><strong>P — Politique</strong></td><td>Stabilité gouvernementale, politiques publiques</td><td>Subventions, marchés publics</td></tr>
+                <tr><td><strong>E — Économique</strong></td><td>PIB, inflation, chômage, taux d'intérêt</td><td>Pouvoir d'achat, coût du crédit</td></tr>
+                <tr><td><strong>S — Socioculturel</strong></td><td>Démographie, modes de vie, valeurs</td><td>Nouvelles cibles, tendances consommation</td></tr>
+                <tr><td><strong>T — Technologique</strong></td><td>Innovations, IA, digitalisation</td><td>Disruption des marchés</td></tr>
+                <tr><td><strong>E — Écologique</strong></td><td>Réglementation environnementale, RSE</td><td>Contraintes production, marché vert</td></tr>
+                <tr><td><strong>L — Légal</strong></td><td>Droit du travail, RGPD, normes</td><td>Conformité obligatoire</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="section-block">
+            <span class="section-title" style="background:#CCFBF1;color:#0F766E">Matrice SWOT</span>
+            <div class="swot-grid">
+              <div class="swot-cell" style="background:#D1FAE5"><h4 style="color:#065F46">FORCES (S)</h4><ul style="color:#064E3B"><li>Compétences distinctives</li><li>Notoriété solide</li><li>Ressources financières</li></ul></div>
+              <div class="swot-cell" style="background:#FEE2E2"><h4 style="color:#7F1D1D">FAIBLESSES (W)</h4><ul style="color:#7F1D1D"><li>Manque de ressources</li><li>Image dégradée</li><li>Dépendance fournisseurs</li></ul></div>
+              <div class="swot-cell" style="background:#DBEAFE"><h4 style="color:#1E3A8A">OPPORTUNITÉS (O)</h4><ul style="color:#1E3A8A"><li>Nouveaux marchés</li><li>Tendances favorables</li><li>Faiblesses concurrents</li></ul></div>
+              <div class="swot-cell" style="background:#FED7AA"><h4 style="color:#7C2D12">MENACES (T)</h4><ul style="color:#7C2D12"><li>Concurrence accrue</li><li>Crise économique</li><li>Nouvelles réglementations</li></ul></div>
+            </div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>PESTEL = macro (global) ; Porter = micro (secteur) ; SWOT = synthèse interne/externe.</li>
+            <li>TOWS = SWOT orientée décision : SO (attaque), ST (défense), WO (rattrapage), WT (repli).</li>
+            <li>La veille est un processus <strong>permanent</strong> : collecter → traiter → diffuser → décider.</li>
+          </ul></div>`
+      }
+    ]
+  },
+  {
+    id: 't3', num: 3, color: '#7C3AED', light: '#EDE9FE', icon: '🏭',
+    title: "L'organisation de l'activité de l'entreprise",
+    disciplines: 'Économie · Droit · Management', year: '1re année',
+    chapters: [
+      {
+        id: 'ch10', num: 10, title: "Les choix de production de l'entreprise",
+        discipline: 'Économie',
+        content: `
+          <div class="grid2">
+            <div class="mini-card"><h4 style="color:#7C3AED">Facteurs de production</h4><ul class="bul"><li><strong>Travail (L) :</strong> heures × qualification</li><li><strong>Capital (K) :</strong> fixe (machines) + circulant</li><li>Productivité du travail = VA / effectif</li><li>Économies d'échelle : CUM ↓ quand Q ↑</li></ul></div>
+            <div class="mini-card"><h4 style="color:#7C3AED">Formules essentielles</h4><ul class="bul"><li><strong>CT = CF + CV</strong></li><li><strong>Cm = ΔCT / ΔQ</strong> (coût marginal)</li><li><strong>CUM = CT / Q</strong> (coût moyen)</li><li><strong>SR = CF / (1 - CV/CA)</strong></li></ul></div>
+          </div>
+          <div class="section-block">
+            <span class="section-title" style="background:#EDE9FE;color:#6D28D9">Tableau des coûts</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#7C3AED"><th>Coût</th><th>Définition</th><th>Formule</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Coût total (CT)</strong></td><td>Ensemble des charges engagées</td><td>CT = CF + CV</td></tr>
+                <tr><td><strong>Coût fixe (CF)</strong></td><td>Indépendant du volume (loyer, amortissements)</td><td>Constant quelle que soit Q</td></tr>
+                <tr><td><strong>Coût variable (CV)</strong></td><td>Évolue avec la production (matières, énergie)</td><td>CV = f(Q)</td></tr>
+                <tr><td><strong>Coût marginal (Cm)</strong></td><td>Coût de la dernière unité produite</td><td>Cm = ΔCT / ΔQ</td></tr>
+                <tr><td><strong>Seuil de rentabilité</strong></td><td>CA pour lequel résultat = 0</td><td>SR = CF / (1 - CV/CA)</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li><strong>Seuil de rentabilité</strong> = CF / taux de marge sur coût variable. À connaître absolument.</li>
+            <li>Économies d'échelle → avantage compétitif sur les coûts.</li>
+            <li>Coût marginal = prix optimal en CPP (Cm = Prix).</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch11', num: 11, title: "Le choix de la structure juridique de l'entreprise",
+        discipline: 'Droit',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#EDE9FE;color:#6D28D9">Critères de choix</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#7C3AED"><th>Critère</th><th>Questions</th><th>Impact</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Nombre d'associés</strong></td><td>Seul ou à plusieurs ?</td><td>Seul → EI/SASU/EURL ; plusieurs → SARL/SAS/SA</td></tr>
+                <tr><td><strong>Responsabilité</strong></td><td>Protéger le patrimoine personnel ?</td><td>Limitée : SARL, SAS, SA / Illimitée : EI, SNC</td></tr>
+                <tr><td><strong>Régime fiscal</strong></td><td>IS ou IR ?</td><td>SAS/SARL → IS par défaut / EI → IR</td></tr>
+                <tr><td><strong>Besoin de capitaux</strong></td><td>Investissement important ?</td><td>SA/SAS facilitent les levées de fonds</td></tr>
+                <tr><td><strong>Flexibilité</strong></td><td>Liberté statutaire ?</td><td>SAS = grande liberté / SARL = plus encadrée</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>SAS/SASU = forme plébiscitée pour sa <strong>flexibilité statutaire</strong> et capital de 1 €.</li>
+            <li>SA = obligatoire pour une cotation en bourse (capital min. 37 000 €).</li>
+            <li>Choix de la forme juridique = décision stratégique engageant responsabilité, fiscalité et gouvernance.</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch12', num: 12, title: "La gestion des risques liés à l'activité de l'entreprise",
+        discipline: 'Droit',
+        content: `
+          <div class="def-box" style="border-color:#7C3AED"><strong>Responsabilité délictuelle (art. 1240 C.civ.)</strong>Tout fait quelconque de l'homme causant dommage à autrui oblige à réparer. <strong>3 conditions : faute + préjudice + lien de causalité.</strong></div>
+          <div class="section-block">
+            <span class="section-title" style="background:#EDE9FE;color:#6D28D9">Types de risques</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#7C3AED"><th>Risque</th><th>Exemples</th><th>Couverture</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Financier</strong></td><td>Variation taux, risque de change, défaut débiteur</td><td>Couverture de change, assurance-crédit</td></tr>
+                <tr><td><strong>Opérationnel</strong></td><td>Panne informatique, défaillance fournisseur</td><td>PCA, assurance, redondance</td></tr>
+                <tr><td><strong>Juridique</strong></td><td>Litiges, non-conformité, contrefaçon</td><td>Compliance, veille juridique, RCP</td></tr>
+                <tr><td><strong>Réputationnel</strong></td><td>Bad buzz, scandale, crise médiatique</td><td>Communication de crise, charte éthique</td></tr>
+                <tr><td><strong>Cyber</strong></td><td>Cyberattaque, ransomware, fuite de données</td><td>SMSI (ISO 27001), RGPD, assurance cyber</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>Responsabilité délictuelle : <strong>faute + préjudice + causalité</strong> (art. 1240 C.civ.).</li>
+            <li>Loi Sapin II (2016) : compliance obligatoire pour les grandes entreprises.</li>
+            <li>PCA (Plan de Continuité d'Activité) = outil central de la gestion du risque opérationnel.</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch13', num: 13, title: "Styles de management et contre-pouvoirs",
+        discipline: 'Management',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#EDE9FE;color:#6D28D9">4 Styles de management (Likert)</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#7C3AED"><th>Style</th><th>Caractéristiques</th><th>Avantages</th><th>Inconvénients</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Directif</strong></td><td>Décision centralisée, contrôle fort</td><td>Réactivité, efficacité en crise</td><td>Démotivation, créativité bloquée</td></tr>
+                <tr><td><strong>Persuasif</strong></td><td>Décision centralisée + adhésion recherchée</td><td>Motivation par explication</td><td>Faible autonomie réelle</td></tr>
+                <tr><td><strong>Participatif</strong></td><td>Consultation avant décision</td><td>Implication, qualité des décisions</td><td>Lenteur, risque d'indécision</td></tr>
+                <tr><td><strong>Délégatif</strong></td><td>Autonomie totale des équipes</td><td>Créativité, responsabilisation</td><td>Risque de dérive</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="grid2">
+            <div class="mini-card"><h4 style="color:#7C3AED">Théorie de l'agence</h4><ul class="bul"><li>Conflit principal (actionnaire) / agent (dirigeant)</li><li>Solutions : intéressement, audit, rémunération variable</li><li>CA, CAC, comité d'audit = outils de contrôle</li></ul></div>
+            <div class="mini-card"><h4 style="color:#7C3AED">Contre-pouvoirs</h4><ul class="bul"><li><strong>CSE :</strong> représentation salariés (≥ 11 salariés)</li><li><strong>Syndicats :</strong> négociation, droit de grève</li><li><strong>Externes :</strong> Autorité concurrence, CNIL, AMF</li></ul></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>4 styles (Likert) : <strong>directif → persuasif → participatif → délégatif</strong>. Pas de style universel optimal.</li>
+            <li>Théorie de l'agence : conflits actionnaires/dirigeants résolus par <strong>incitations + contrôle</strong>.</li>
+            <li>CSE = instance unique de représentation du personnel depuis 2017 (ordonnances Macron).</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch14', num: 14, title: "L'organisation des ressources dans l'entreprise",
+        discipline: 'Management',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#EDE9FE;color:#6D28D9">Structures organisationnelles</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#7C3AED"><th>Structure</th><th>Principe</th><th>Avantages</th><th>Inconvénients</th><th>Adapté à</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Hiérarchique</strong></td><td>Commandement unique</td><td>Clarté des ordres</td><td>Lourdeur, faible coordination</td><td>PME simples</td></tr>
+                <tr><td><strong>Fonctionnelle</strong></td><td>Spécialisation par fonction</td><td>Expertise, efficacité</td><td>Conflits entre fonctions</td><td>Mono-activité</td></tr>
+                <tr><td><strong>Divisionnelle</strong></td><td>Division par produit/marché/zone</td><td>Autonomie, réactivité</td><td>Duplication des ressources</td><td>Entreprises diversifiées</td></tr>
+                <tr><td><strong>Matricielle</strong></td><td>Double autorité : métier + projet</td><td>Flexibilité, transversalité</td><td>Conflits d'autorité, complexité</td><td>Multinationales</td></tr>
+                <tr><td><strong>Réseau / Projets</strong></td><td>Équipes temporaires + sous-traitance</td><td>Agilité, coûts variables</td><td>Dépendance partenaires</td><td>Start-ups, numérique</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>Mintzberg — 5 mécanismes de coordination : <strong>ajustement mutuel, supervision directe, standardisation des procédés/résultats/compétences</strong>.</li>
+            <li>Structure matricielle = double hiérarchie → complexe mais adaptée aux projets d'innovation.</li>
+            <li>Tendance actuelle : structures <strong>plates et agiles</strong> (moins de niveaux hiérarchiques, plus d'autonomie).</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch15', num: 15, title: "Le financement de l'entreprise",
+        discipline: 'Management',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#EDE9FE;color:#6D28D9">Sources de financement</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#7C3AED"><th>Source</th><th>Type</th><th>Avantages</th><th>Inconvénients</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Autofinancement (CAF)</strong></td><td>Interne</td><td>Indépendance, pas de remboursement</td><td>Limite la capacité d'investissement</td></tr>
+                <tr><td><strong>Augmentation de capital</strong></td><td>Externe (fonds propres)</td><td>Renforce solvabilité</td><td>Dilution du pouvoir des actionnaires</td></tr>
+                <tr><td><strong>Emprunt bancaire</strong></td><td>Externe (dette)</td><td>Effet de levier financier</td><td>Remboursement + intérêts, covenants</td></tr>
+                <tr><td><strong>Crédit-bail (leasing)</strong></td><td>Externe (location + option)</td><td>Préserve trésorerie</td><td>Coût total élevé</td></tr>
+                <tr><td><strong>Capital-risque (VC)</strong></td><td>Externe (fonds propres)</td><td>Financement start-ups</td><td>Cession de parts importantes</td></tr>
+                <tr><td><strong>IPO (bourse)</strong></td><td>Marchés financiers</td><td>Montants très élevés, liquidité</td><td>Exigences de transparence, coûts</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="def-box" style="border-color:#7C3AED"><strong>Effet de levier financier</strong>Si taux de rentabilité économique (Reco) > taux d'intérêt (i), l'endettement amplifie la rentabilité des capitaux propres. <strong>Re = Reco + (Reco − i) × D/CP</strong></div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>CAF = première ressource interne — mesure le potentiel de remboursement de l'entreprise.</li>
+            <li>Effet de levier : <strong>Reco > i</strong> → l'endettement augmente la rentabilité des capitaux propres.</li>
+            <li>IPO = Introduction en Bourse — accès aux marchés financiers mais perte partielle de contrôle.</li>
+          </ul></div>`
+      }
+    ]
+  },
+  {
+    id: 't4', num: 4, color: '#EA580C', light: '#FED7AA', icon: '💻',
+    title: "L'impact du numérique sur la vie de l'entreprise",
+    disciplines: 'Économie · Droit · Management', year: '2e année',
+    chapters: [
+      {
+        id: 'ch16', num: '16-17', title: "Évolutions économiques et adaptation des entreprises au numérique",
+        discipline: 'Économie',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#FED7AA;color:#C2410C">Phénomènes numériques</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#EA580C"><th>Phénomène</th><th>Définition</th><th>Exemples</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Économie de plateforme</strong></td><td>Intermédiation numérique — effet réseau (valeur croît avec le nb d'utilisateurs)</td><td>Airbnb, Uber, Amazon Marketplace</td></tr>
+                <tr><td><strong>Économie collaborative</strong></td><td>Partage ou location temporaire de biens entre particuliers</td><td>Vinted, LeBonCoin, BlaBlaCar</td></tr>
+                <tr><td><strong>Disruption numérique</strong></td><td>Innovation qui remet en cause les acteurs établis d'un secteur</td><td>Netflix vs vidéo-clubs, Spotify vs CD</td></tr>
+                <tr><td><strong>Long tail (longue traîne)</strong></td><td>Rentabilité de niches grâce au digital (coût marginal → 0)</td><td>Amazon vs hypermarché</td></tr>
+                <tr><td><strong>Big Data & IA</strong></td><td>Collecte et analyse de masses de données pour personnaliser l'offre</td><td>Recommandations Netflix, tarification dynamique</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>Effet réseau = plus une plateforme a d'utilisateurs, plus elle crée de valeur — mécanisme clé des GAFAM.</li>
+            <li>Disruption : les entreprises établies doivent se <strong>réinventer</strong> ou risquer l'obsolescence.</li>
+            <li>Long tail : le digital permet de vendre des références à très faible rotation rentablement.</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch17', num: '18-19', title: "RGPD et protection des actifs immatériels numériques",
+        discipline: 'Droit',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#FED7AA;color:#C2410C">RGPD (2018) — 7 Principes fondamentaux</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#EA580C"><th>Principe</th><th>Contenu</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Licéité du traitement</strong></td><td>Consentement explicite ou base légale obligatoire (contrat, obligation légale, intérêt légitime)</td></tr>
+                <tr><td><strong>Finalité déterminée</strong></td><td>Données utilisées uniquement aux fins pour lesquelles elles ont été collectées</td></tr>
+                <tr><td><strong>Minimisation des données</strong></td><td>Ne collecter que les données strictement nécessaires</td></tr>
+                <tr><td><strong>Exactitude</strong></td><td>Données mises à jour, rectification sur demande</td></tr>
+                <tr><td><strong>Limitation de conservation</strong></td><td>Durée de conservation limitée et définie à l'avance</td></tr>
+                <tr><td><strong>Droits des personnes</strong></td><td>Accès, rectification, effacement (droit à l'oubli), portabilité, opposition</td></tr>
+                <tr><td><strong>Sanctions</strong></td><td>Jusqu'à <strong>4% du CA mondial ou 20 M€</strong> — autorité : CNIL en France</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="def-box" style="border-color:#EA580C"><strong>DPO — Data Protection Officer</strong>Obligatoire si traitement à grande échelle ou données sensibles. En cas de violation de données : notification CNIL sous <strong>72 heures</strong>.</div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>RGPD : 7 grands principes + droits des personnes. <strong>Sanction max : 4% CA mondial ou 20 M€</strong>.</li>
+            <li>DPO = obligatoire si traitement à grande échelle ou données sensibles.</li>
+            <li>Droit à l'oubli / effacement = droit fondamental reconnu par le RGPD (art. 17).</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch18', num: '20-21', title: "Preuve électronique, contrats numériques et management agile",
+        discipline: 'Droit + Management',
+        content: `
+          <div class="grid2">
+            <div class="mini-card"><h4 style="color:#EA580C">Preuve & contrat électronique</h4><ul class="bul"><li><strong>Art. 1366 C.civ. :</strong> écrit électronique = même valeur que papier</li><li><strong>Signature électronique (eIDAS) :</strong> qualifiée = même valeur que manuscrite</li><li><strong>LCEN 2004 :</strong> offre claire + double clic + archivage</li></ul></div>
+            <div class="mini-card"><h4 style="color:#EA580C">Management numérique</h4><ul class="bul"><li><strong>ERP</strong> (SAP, Oracle) : intégration des fonctions</li><li><strong>CRM</strong> (Salesforce) : gestion relation client</li><li><strong>Agile / Scrum :</strong> sprints, product owner</li><li>Télétravail + droit à la déconnexion (loi El Khomri 2016)</li></ul></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>Contrat électronique valide = <strong>offre claire + double clic + archivage accessible</strong> (règle LCEN).</li>
+            <li>Signature électronique qualifiée (eIDAS) = même valeur que la signature manuscrite.</li>
+            <li>Droit à la déconnexion : obligation de négociation dans les entreprises > 50 salariés (loi El Khomri, 2016).</li>
+          </ul></div>`
+      }
+    ]
+  },
+  {
+    id: 't5', num: 5, color: '#059669', light: '#D1FAE5', icon: '👷',
+    title: "Les mutations du travail",
+    disciplines: 'Économie · Droit · Management', year: '2e année',
+    chapters: [
+      {
+        id: 'ch19', num: '22-23', title: "Le marché du travail et les politiques de l'emploi",
+        discipline: 'Économie',
+        content: `
+          <div class="grid2">
+            <div class="mini-card"><h4 style="color:#059669">Marché du travail</h4><ul class="bul"><li><strong>Offre</strong> (ménages) : salaire, conditions de travail, démographie</li><li><strong>Demande</strong> (entreprises) : coût du travail, productivité</li><li><strong>SMIC 2024 :</strong> 11,65 €/h brut</li></ul></div>
+            <div class="mini-card"><h4 style="color:#059669">Chômage BIT</h4><ul class="bul"><li>Sans emploi <strong>+</strong> disponible sous 2 semaines <strong>+</strong> en recherche active</li><li>Types : frictionnel, structurel, conjoncturel, technologique</li><li>Taux = chômeurs / population active × 100</li></ul></div>
+          </div>
+          <div class="section-block">
+            <span class="section-title" style="background:#D1FAE5;color:#047857">Politiques de l'emploi</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#059669"><th>Type</th><th>Objectif</th><th>Instruments</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Active</strong></td><td>Retour à l'emploi, compétences</td><td>CPF, apprentissage, aides à l'embauche, France Travail</td></tr>
+                <tr><td><strong>Passive</strong></td><td>Indemniser le chômage</td><td>Assurance chômage (ARE), préretraites</td></tr>
+                <tr><td><strong>Flexibilisation</strong></td><td>Adapter la MO aux besoins</td><td>CDI/CDD, intérim, rupture conventionnelle</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>Chômage BIT : 3 critères cumulatifs — <strong>sans emploi + disponible sous 2 semaines + recherche active</strong>.</li>
+            <li>CPF (Compte Personnel de Formation) = droit attaché à la personne, pas à l'entreprise.</li>
+            <li>France Travail (ex Pôle emploi) = opérateur principal du service public de l'emploi depuis 2024.</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch20', num: '24-25', title: "Le contrat de travail et les partenaires sociaux",
+        discipline: 'Droit',
+        content: `
+          <div class="def-box" style="border-color:#059669"><strong>Contrat de travail</strong>Convention par laquelle un salarié s'engage à travailler pour un employeur sous sa <strong>subordination juridique</strong> en échange d'une rémunération. Le lien de subordination est l'élément distinctif.</div>
+          <div class="section-block">
+            <span class="section-title" style="background:#D1FAE5;color:#047857">Types de contrats</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#059669"><th>Type</th><th>Caractéristiques</th><th>Durée</th></tr></thead>
+              <tbody>
+                <tr><td><strong>CDI</strong></td><td>Droit commun de la relation d'emploi</td><td>Indéterminée</td></tr>
+                <tr><td><strong>CDD</strong></td><td>Motifs légaux obligatoires (remplacement, surcroît, saisonnier)</td><td>18 mois max + renouvellement</td></tr>
+                <tr><td><strong>Apprentissage</strong></td><td>Alternance formation/entreprise — 16-29 ans</td><td>1 à 3 ans</td></tr>
+                <tr><td><strong>Portage salarial</strong></td><td>Travailleur indépendant porté par une société de portage</td><td>Variable</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="grid2">
+            <div class="mini-card"><h4 style="color:#059669">Hiérarchie des normes sociales</h4><ul class="bul"><li>Constitution → Loi → Conv. collective branche</li><li>→ Accord d'entreprise → Contrat de travail</li><li>Syndicats représentatifs : CGT, CFDT, FO, CFTC, CFE-CGC</li></ul></div>
+            <div class="mini-card"><h4 style="color:#059669">CSE</h4><ul class="bul"><li>Obligatoire ≥ <strong>11 salariés</strong></li><li>Fusionne CE + DP + CHSCT</li><li>Attributions : information/consultation, BDESE, droit d'alerte</li></ul></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>Lien de subordination = critère <strong>fondamental</strong> du contrat de travail.</li>
+            <li>CSE obligatoire dès 11 salariés — remplace CE, DP et CHSCT depuis 2017 (ordonnances Macron).</li>
+            <li>Hiérarchie des normes : Constitution > Loi > Convention collective > Accord d'entreprise > Contrat.</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch21', num: '26-27', title: "La protection du salarié et les mutations du travail",
+        discipline: 'Droit + Management',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#D1FAE5;color:#047857">Protections du salarié</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#059669"><th>Domaine</th><th>Droits et protections</th><th>Texte</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Santé et sécurité</strong></td><td>Obligation de sécurité de l'employeur. DUERP obligatoire pour toute entreprise.</td><td>Art. L4121-1 CT</td></tr>
+                <tr><td><strong>Durée du travail</strong></td><td>35h légales, HS majorées (+25%/+50%), 5 semaines de congés payés</td><td>Code du travail</td></tr>
+                <tr><td><strong>Rémunération</strong></td><td>SMIC, égalité salariale H/F, index égalité pro. obligatoire > 50 salariés</td><td>Loi Rixain 2021</td></tr>
+                <tr><td><strong>Harcèlement</strong></td><td>Interdiction discrimination (19 critères) et harcèlement moral/sexuel</td><td>Art. L1152-1 CT</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="grid2">
+            <div class="mini-card"><h4 style="color:#059669">Rupture du contrat</h4><ul class="bul"><li><strong>Licenciement perso :</strong> cause réelle et sérieuse, procédure obligatoire</li><li><strong>Licenciement éco :</strong> PSE si ≥ 10 licenciements</li><li><strong>Rupture conventionnelle :</strong> accord mutuel, homologation DREETS, ouvre droit ARE</li></ul></div>
+            <div class="mini-card"><h4 style="color:#059669">GPEC / GEPP</h4><ul class="bul"><li>Anticiper les évolutions des emplois et compétences</li><li>Obligatoire par accord de branche tous les 3 ans > 300 salariés</li><li>Outils : cartographie métiers, plan de formation, mobilité interne</li></ul></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>Rupture conventionnelle = mode de rupture le <strong>plus utilisé</strong> en France — ouvre droit aux ARE.</li>
+            <li>DUERP obligatoire pour toute entreprise, quelle que soit sa taille.</li>
+            <li>Index égalité professionnelle H/F : obligatoire > 50 salariés — publication annuelle.</li>
+          </ul></div>`
+      }
+    ]
+  },
+  {
+    id: 't6', num: 6, color: '#DC2626', light: '#FEE2E2', icon: '🎯',
+    title: "Les choix stratégiques de l'entreprise",
+    disciplines: 'Management', year: '2e année',
+    chapters: [
+      {
+        id: 'ch22', num: 28, title: "La démarche et le diagnostic stratégiques",
+        discipline: 'Management',
+        content: `
+          <div class="def-box" style="border-color:#DC2626"><strong>Stratégie (Chandler)</strong>Détermination des objectifs à long terme d'une organisation et choix des actions et ressources nécessaires pour les atteindre.</div>
+          <div class="section-block">
+            <span class="section-title" style="background:#FEE2E2;color:#B91C1C">3 Niveaux de stratégie</span>
+            <ul class="bul">
+              <li><strong>Corporate / groupe :</strong> sur quel(s) DAS l'entreprise se positionne-t-elle ? (Diversification, recentrage, internationalisation)</li>
+              <li><strong>Business / concurrentielle :</strong> comment gagner face aux concurrents dans chaque DAS ? (Avantage compétitif)</li>
+              <li><strong>Fonctionnelle :</strong> comment chaque fonction (RH, fin., mktg) contribue à la stratégie globale ?</li>
+            </ul>
+          </div>
+          <div class="section-block">
+            <span class="section-title" style="background:#FEE2E2;color:#B91C1C">Outils de diagnostic</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#DC2626"><th>Outil</th><th>Niveau</th><th>Questions clés</th><th>Résultats</th></tr></thead>
+              <tbody>
+                <tr><td><strong>PESTEL</strong></td><td>Macro-environnement</td><td>Quelles forces externes agissent ?</td><td>Opportunités et Menaces macro</td></tr>
+                <tr><td><strong>5 forces Porter</strong></td><td>Micro-environnement</td><td>L'intensité concurrentielle est-elle forte ?</td><td>Attractivité du secteur</td></tr>
+                <tr><td><strong>Chaîne de valeur Porter</strong></td><td>Analyse interne</td><td>Où l'entreprise crée-t-elle de la valeur ?</td><td>Sources d'avantage concurrentiel</td></tr>
+                <tr><td><strong>VRIO (Barney)</strong></td><td>Ressources et compétences</td><td>Valuable + Rare + Inimitable + Organized ?</td><td>Compétences distinctives durables</td></tr>
+                <tr><td><strong>SWOT</strong></td><td>Synthèse interne + externe</td><td>Forces/Faiblesses/Opp./Menaces ?</td><td>Orientations stratégiques</td></tr>
+                <tr><td><strong>Matrice BCG</strong></td><td>Portefeuille d'activités</td><td>Rentabilité et croissance par DAS ?</td><td>Vedettes, Vaches à lait, Dilemmes, Poids morts</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="section-block">
+            <span class="section-title" style="background:#FEE2E2;color:#B91C1C">Matrice BCG</span>
+            <div class="swot-grid">
+              <div class="swot-cell" style="background:#D1FAE5"><h4 style="color:#065F46">⭐ VEDETTES</h4><ul style="color:#064E3B"><li>Forte croissance</li><li>Forte PDM</li><li>→ Investir</li></ul></div>
+              <div class="swot-cell" style="background:#FEE2E2"><h4 style="color:#7F1D1D">❓ DILEMMES</h4><ul style="color:#7F1D1D"><li>Forte croissance</li><li>Faible PDM</li><li>→ Arbitrer</li></ul></div>
+              <div class="swot-cell" style="background:#FEF3C7"><h4 style="color:#78350F">🐄 VACHES À LAIT</h4><ul style="color:#78350F"><li>Faible croissance</li><li>Forte PDM</li><li>→ Récolter</li></ul></div>
+              <div class="swot-cell" style="background:#F1F5F9"><h4 style="color:#475569">🐕 POIDS MORTS</h4><ul style="color:#475569"><li>Faible croissance</li><li>Faible PDM</li><li>→ Désinvestir</li></ul></div>
+            </div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>Chaîne de valeur Porter = identifier les sources d'avantage concurrentiel à l'intérieur de l'entreprise.</li>
+            <li>BCG : <strong>Vedettes → Vaches à lait → Poids morts → Désinvestissement</strong> (cycle de vie des DAS).</li>
+            <li>VRIO : ressource durable seulement si <strong>Valuable + Rare + Inimitable + Organisée</strong>.</li>
+          </ul></div>`
+      },
+      {
+        id: 'ch23', num: 29, title: "Le processus de décision et les choix stratégiques",
+        discipline: 'Management',
+        content: `
+          <div class="section-block">
+            <span class="section-title" style="background:#FEE2E2;color:#B91C1C">3 Stratégies génériques (Porter)</span>
+            <div class="table-wrap"><table class="fiche-table">
+              <thead><tr style="background:#DC2626"><th>Stratégie</th><th>Principe</th><th>Avantage</th><th>Risques</th><th>Exemples</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Domination par les coûts</strong></td><td>Prix le plus bas grâce à des coûts de production inférieurs</td><td>Compétitivité-prix</td><td>Guerre des prix, imitation</td><td>Lidl, Ryanair, Décathlon</td></tr>
+                <tr><td><strong>Différenciation</strong></td><td>Produit perçu comme unique et supérieur</td><td>Prix premium, fidélité client</td><td>Coût élevé, imitation</td><td>Apple, L'Oréal, Tesla</td></tr>
+                <tr><td><strong>Concentration (niche)</strong></td><td>Focalisation sur un segment étroit</td><td>Peu de concurrents directs</td><td>Dépendance d'un seul segment</td><td>Hermès, Ferrari</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="grid2">
+            <div class="mini-card"><h4 style="color:#DC2626">Matrice d'Ansoff</h4><ul class="bul"><li><strong>Pénétration :</strong> mêmes produits, mêmes marchés</li><li><strong>Extension marché :</strong> mêmes produits, nouveaux marchés</li><li><strong>Développement produit :</strong> nouveaux produits, mêmes marchés</li><li><strong>Diversification :</strong> nouveaux produits + nouveaux marchés (risque max)</li></ul></div>
+            <div class="mini-card"><h4 style="color:#DC2626">Croissance et intégration</h4><ul class="bul"><li><strong>Interne :</strong> organique, lente, maîtrise préservée</li><li><strong>Externe :</strong> fusion/acquisition, rapide, synergies</li><li><strong>Intégration verticale :</strong> contrôle amont (fournisseurs) ou aval (distribution)</li><li><strong>Externalisation :</strong> recentrage sur le cœur de métier</li></ul></div>
+          </div>
+          <div class="retenir"><div class="retenir-title">✅ À retenir</div><ul>
+            <li>3 stratégies génériques Porter : <strong>domination coûts + différenciation + concentration</strong>. Être "coincé au milieu" = pire position.</li>
+            <li>Ansoff : la <strong>diversification</strong> = stratégie la plus risquée (nouveaux produits + nouveaux marchés).</li>
+            <li>Croissance externe = rapide mais intégration difficile (chocs culturels, synergies souvent décevantes).</li>
+          </ul></div>`
+      }
+    ]
+  }
+];
+
+function buildSidebar() {
+  const nav = document.getElementById('sidebarNav');
+  THEMES.forEach(theme => {
+    const sec = document.createElement('div');
+    sec.className = 'sidebar-section';
+    sec.innerHTML = `
+      <button class="sidebar-theme-btn" data-theme="${theme.id}" onclick="toggleTheme('${theme.id}')">
+        <span class="theme-dot" style="background:${theme.color}"></span>
+        ${theme.icon} T${theme.num}
+      </button>
+      <div class="sidebar-chapters" id="sc-${theme.id}">
+        ${theme.chapters.map(ch => `
+          <a class="sidebar-ch-link" data-id="${ch.id}" onclick="scrollToChapter('${ch.id}')">
+            Ch.${ch.num} — ${ch.title.substring(0,38)}${ch.title.length>38?'…':''}
+          </a>
+        `).join('')}
+      </div>
+      <div class="sidebar-divider"></div>
+    `;
+    nav.appendChild(sec);
+  });
+}
+
+function toggleTheme(id) {
+  const sc = document.getElementById('sc-'+id);
+  sc.classList.toggle('open');
+}
+
+function scrollToChapter(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({behavior: 'smooth', block: 'start'});
+    el.querySelector('.fiche-card').classList.add('open');
+    el.querySelector('.fiche-body').style.display = 'block';
+  }
+}
+
+function buildFiches() {
+  const container = document.getElementById('ficheContainer');
+  THEMES.forEach(theme => {
+    const sec = document.createElement('section');
+    sec.className = 'theme-section';
+    sec.id = theme.id;
+    sec.innerHTML = `
+      <div class="theme-header" style="background:${theme.color}">
+        <span class="theme-icon">${theme.icon}</span>
+        <div>
+          <h2>Thème ${theme.num} — ${theme.title}</h2>
+          <div class="theme-sub">${theme.disciplines}</div>
+        </div>
+        <div class="theme-chips">
+          <span class="chip">${theme.year}</span>
+          <span class="chip">${theme.chapters.length} fiches</span>
+        </div>
+      </div>
+      ${theme.chapters.map(ch => `
+        <div id="${ch.id}" style="scroll-margin-top:80px">
+          <div class="fiche-card" data-search="${ch.title.toLowerCase()} ${ch.discipline.toLowerCase()} ${ch.content.replace(/<[^>]+>/g,'').toLowerCase()}">
+            <div class="fiche-header" onclick="toggleFiche(this)">
+              <div class="fiche-num" style="background:${theme.color}">Ch.${ch.num}</div>
+              <div class="fiche-title-wrap">
+                <div class="fiche-ch-label" style="color:${theme.color}">Chapitre ${ch.num}</div>
+                <div class="fiche-title">${ch.title}</div>
+                <div class="fiche-discipline">${ch.discipline}</div>
+              </div>
+              <span class="fiche-arrow">▾</span>
+            </div>
+            <div class="fiche-body">
+              <div class="fiche-body-inner">${ch.content}</div>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    `;
+    container.appendChild(sec);
+  });
+}
+
+function toggleFiche(header) {
+  const card = header.closest('.fiche-card');
+  const body = card.querySelector('.fiche-body');
+  card.classList.toggle('open');
+  body.style.display = card.classList.contains('open') ? 'block' : 'none';
+}
+
+function search(query) {
+  const q = query.toLowerCase().trim();
+  const container = document.getElementById('ficheContainer');
+  const noResult = document.getElementById('noResult');
+  const sections = container.querySelectorAll('.theme-section');
+  let totalVisible = 0;
+
+  if (!q) {
+    sections.forEach(s => s.style.display = '');
+    container.querySelectorAll('.fiche-card').forEach(c => {
+      c.style.display = '';
+      c.closest('[id]').style.display = '';
+      const body = c.querySelector('.fiche-body-inner');
+      body.innerHTML = body.innerHTML.replace(/<mark>(.*?)<\/mark>/g, '$1');
+    });
+    noResult.style.display = 'none';
+    document.getElementById('resultCount').textContent = '29 fiches';
+    return;
+  }
+
+  sections.forEach(sec => {
+    const cards = sec.querySelectorAll('.fiche-card');
+    let secVisible = 0;
+    cards.forEach(card => {
+      const text = card.dataset.search || '';
+      if (text.includes(q)) {
+        card.style.display = '';
+        card.closest('[id]').style.display = '';
+        card.classList.add('open');
+        card.querySelector('.fiche-body').style.display = 'block';
+        secVisible++;
+        totalVisible++;
+        const body = card.querySelector('.fiche-body-inner');
+        body.innerHTML = body.innerHTML.replace(/<mark>(.*?)<\/mark>/g,'$1');
+        const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+        body.innerHTML = body.innerHTML.replace(re, '<mark>$1</mark>');
+      } else {
+        card.style.display = 'none';
+        card.closest('[id]').style.display = 'none';
+      }
+    });
+    sec.style.display = secVisible > 0 ? '' : 'none';
+  });
+
+  noResult.style.display = totalVisible === 0 ? 'block' : 'none';
+  document.getElementById('resultCount').textContent = `${totalVisible} résultat${totalVisible>1?'s':''}`;
+}
+
+document.getElementById('searchInput').addEventListener('input', e => search(e.target.value));
+
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('backTop');
+  btn.classList.toggle('visible', window.scrollY > 400);
+  const links = document.querySelectorAll('.sidebar-ch-link');
+  links.forEach(l => l.classList.remove('active'));
+  THEMES.forEach(t => {
+    t.chapters.forEach(ch => {
+      const el = document.getElementById(ch.id);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= 120 && rect.bottom > 0) {
+          const link = document.querySelector(`.sidebar-ch-link[data-id="${ch.id}"]`);
+          if (link) link.classList.add('active');
+          const sc = document.getElementById('sc-'+t.id);
+          if (sc && !sc.classList.contains('open')) sc.classList.add('open');
+        }
+      }
+    });
+  });
+});
+
+buildSidebar();
+buildFiches();
+THEMES.forEach(t => toggleTheme(t.id));
+</script>
+</body>
+</html>
